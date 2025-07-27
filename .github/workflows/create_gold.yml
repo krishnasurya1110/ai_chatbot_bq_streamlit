@@ -9,7 +9,7 @@ jobs:
   create-resources:
     runs-on: ubuntu-latest
     env:
-      SCHEMA_FILE: schemas/ridership_schema.json
+      SCHEMA_FILE: gold_layer/ridership_schema.json
       TABLE_NAME: nyc
       INCREMENTAL_TABLE_NAME: inc_nyc
 
