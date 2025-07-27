@@ -45,9 +45,10 @@ jobs:
             echo "GCS bucket ${BUCKET_NAME} already exists."
           fi
 
-      - name: Upload dataproc_init.sh to GCS
+      - name: Upload files to GCS
         run: |
-          gsutil cp silver_layer/${INIT_SCRIPT_LOCAL} gs://${BUCKET_NAME}/${INIT_SCRIPT_GCS}
+          echo "Upload silver layer files to GCS bucket ${BUCKET_NAME}"
+          gsutil -m rsync -av silver_layer/ gs://${BUCKET_NAME}
 
       - name: Create Dataproc Cluster
         run: |
