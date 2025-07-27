@@ -2,13 +2,9 @@ name : Create Docker Image
 
 
 on:
-    push:
-        paths:
-            - 'bronze_layer/bronze_main.py'              
-            - 'bronze_layer/bronze_functions.py'         
-            - 'bronze_layer/requirements.txt'  
-            - 'bronze_layer/Dockerfile' 
-            - 'bronze_layer/bronze_logger.py'
+  push:
+    branches:
+      - main
 
 jobs:
     deploy:
