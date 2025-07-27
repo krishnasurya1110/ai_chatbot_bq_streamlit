@@ -242,4 +242,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # main(args.source_path, args.delta_table_path, args.quarantine_path_good, args.quarantine_path_bad)
-    main("gs://nyc_subway_transit_data/", "gs://nyc_subway_delta_lake/", "gs://nyc_good_data_bucket/", "gs://nyc_bad_data_bucket/")
+    main("gs://nyc_subway_transit_data/", "gs://nyc_transit_delta_lake/", "gs://nyc_transit_good_data/", "gs://nyc_transit_bad_data/")

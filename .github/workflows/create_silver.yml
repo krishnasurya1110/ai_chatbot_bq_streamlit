@@ -14,6 +14,12 @@ jobs:
       INIT_SCRIPT_GCS: dataproc_init.sh
       CLUSTER_NAME: rakshaka
       PYTHON_SCRIPT: silver_main.py
+      SPARK_FILES: silver_functions.py,silver_logger.py
+      SPARK_ARGS: |-
+        "gs://nyc_subway_transit_data/"
+        "gs://nyc_transit_delta_lake/"
+        "gs://nyc_transit_good_data/"
+        "gs://nyc_transit_bad_data/"
 
     steps:
       - name: Code Checkout
@@ -78,4 +84,8 @@ jobs:
           gcloud dataproc jobs submit pyspark \
             --cluster=${CLUSTER_NAME} \
             --region=us-central1 \
-            gs://${BUCKET_NAME}/${PYTHON_SCRIPT}
+            gs://${BUCKET_NAME}/${PYTHON_SCRIPT} \
+            --files=gs://${BUCKET_NAME}/${SPARK_FILES} \
+            -- \
+            ${SPARK_ARGS}
+
