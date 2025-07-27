@@ -36,4 +36,4 @@ ${PIP_EXEC} install delta-spark==2.3.0
 ${PIP_EXEC} install google-cloud-logging==3.7.0
 ${PIP_EXEC} install xgboost==1.7.6
 
-# edit for test
+# edit for cicd test
