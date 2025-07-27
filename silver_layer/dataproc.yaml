@@ -7,7 +7,7 @@ gcloud dataproc clusters create rakshaka \
     --worker-machine-type=e2-standard-2 \
     --worker-boot-disk-size=50GB \
     --image-version=2.1-debian11 \
-    --initialization-actions=gs://bucket-jars/spark-jars/dataproc_init.sh \
+    --initialization-actions=gs://dataproc-cluster-spark-jars/dataproc_init.sh \
     --optional-components=JUPYTER \
     --enable-component-gateway
 
