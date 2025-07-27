@@ -1,0 +1,83 @@
+{
+  "type": "struct",
+  "fields": [
+    {
+      "name": "transit_timestamp",
+      "type": "long",
+      "nullable": true
+    },
+    {
+      "name": "transit_mode",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "station_complex_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "station_complex",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "borough",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "payment_method",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "fare_class_category",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "ridership",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "transfers",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "latitude",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "longitude",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "georeference",
+      "type": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "coordinates",
+            "type": {
+              "type": "array",
+              "elementType": "double",
+              "containsNull": true
+            },
+            "nullable": true
+          },
+          {
+            "name": "type",
+            "type": "string",
+            "nullable": true
+          }
+        ]
+      },
+      "nullable": true
+    }
+  ]
+}
