@@ -150,3 +150,4 @@ if __name__ == "__main__":
         bq_table_id=args.bq_table_id,
         inc_bq_table_id=args.inc_bq_table_id
     )
+

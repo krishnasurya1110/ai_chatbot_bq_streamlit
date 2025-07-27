@@ -71,13 +71,16 @@ jobs:
             echo "Table ${{ secrets.BQ_DATASET }}.${{ env.TABLE_NAME }} already exists"
           fi
 
-    
-      - name: Create BigQuery Table for incremental load
+      - name: Create BigQuery Table for incremental load if not exists
         run: |
-          bq mk --table \
-          --project_id=${{ secrets.GCP_PROJECT_ID }} \
-          ${{ secrets.BQ_DATASET }}.${{ env.INCREMENTAL_TABLE_NAME }} \
-          ${{ env.SCHEMA_FILE }}
+          if ! bq show --format=prettyjson ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET }}.${{ env.INCREMENTAL_TABLE_NAME }} > /dev/null 2>&1; then
+            bq mk --table \
+              --project_id=${{ secrets.GCP_PROJECT_ID }} \
+              ${{ secrets.BQ_DATASET }}.${{ env.INCREMENTAL_TABLE_NAME }} \
+              ${{ env.SCHEMA_FILE }}
+          else
+            echo "Table ${{ secrets.BQ_DATASET }}.${{ env.INCREMENTAL_TABLE_NAME }} already exists"
+          fi
      
       - name: Submit PySpark Job to Dataproc
         run: |
