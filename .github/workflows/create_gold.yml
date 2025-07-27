@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SCHEMA_FILE: gold_layer/ridership_schema.json
+      BUCKET_NAME: dataproc-cluster-spark-jars
       TABLE_NAME: nyc
       INCREMENTAL_TABLE_NAME: inc_nyc
 
@@ -44,7 +45,11 @@ jobs:
         run: |
           gsutil mb -p ${{ secrets.GCP_PROJECT_ID }} -l US gs://${{ steps.hash.outputs.bucket }}
 
-      
+      - name: Upload files to GCS
+        run: |
+          echo "Upload gold layer files to GCS bucket ${BUCKET_NAME}"
+          gsutil -m rsync -r gold_layer/ gs://${BUCKET_NAME}
+
       - name: Create BigQuery Dataset if not exists
         run: |
           if ! bq ls --project_id=${{ secrets.GCP_PROJECT_ID }} | grep -q "${{ secrets.BQ_DATASET }}"; then
