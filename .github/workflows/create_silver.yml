@@ -47,7 +47,7 @@ jobs:
 
       - name: Upload dataproc_init.sh to GCS
         run: |
-          gsutil cp ${INIT_SCRIPT_LOCAL} gs://${BUCKET_NAME}/${INIT_SCRIPT_GCS}
+          gsutil cp silver_layer/${INIT_SCRIPT_LOCAL} gs://${BUCKET_NAME}/${INIT_SCRIPT_GCS}
 
       - name: Create Dataproc Cluster
         run: |
