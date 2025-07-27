@@ -1,4 +1,4 @@
-from functions import *
+from bronze_functions import *
 
 import os
 import time
