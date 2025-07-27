@@ -89,3 +89,9 @@ jobs:
                       --cpu 4 
                   fi
       
+        - name: Run Cloud Run Job
+          run: |
+            JOB_NAME="ingest-job"
+            REGION="${{ secrets.GCP_REGION }}"
+            echo "Running Cloud Run Job '$JOB_NAME'..."
+            gcloud run jobs execute $JOB_NAME --region $REGION
