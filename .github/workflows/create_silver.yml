@@ -86,7 +86,7 @@ jobs:
             --cluster=${CLUSTER_NAME} \
             --region=us-central1 \
             gs://${BUCKET_NAME}/${PYTHON_SCRIPT} \
-            --files=gs://${BUCKET_NAME}/${FUNCTIONS_SCRIPT}, gs://${BUCKET_NAME}/${LOGGING_SCRIPT} \
+            --files=gs://${BUCKET_NAME}/${FUNCTIONS_SCRIPT},gs://${BUCKET_NAME}/${LOGGING_SCRIPT} \
             -- \
             ${SPARK_ARGS}
 
