@@ -1,83 +1,74 @@
-{
-  "type": "struct",
-  "fields": [
-    {
-      "name": "transit_timestamp",
-      "type": "long",
-      "nullable": true
-    },
-    {
-      "name": "transit_mode",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "station_complex_id",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "station_complex",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "borough",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "payment_method",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "fare_class_category",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "ridership",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "transfers",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "latitude",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "longitude",
-      "type": "string",
-      "nullable": true
-    },
-    {
-      "name": "georeference",
-      "type": {
-        "type": "struct",
-        "fields": [
-          {
-            "name": "coordinates",
-            "type": {
-              "type": "array",
-              "elementType": "double",
-              "containsNull": true
-            },
-            "nullable": true
-          },
-          {
-            "name": "type",
-            "type": "string",
-            "nullable": true
-          }
-        ]
+[
+  {
+    "name": "transit_timestamp",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "transit_mode",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "station_complex_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "station_complex",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "borough",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "payment_method",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "fare_class_category",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "ridership",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "transfers",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "latitude",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "longitude",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "georeference",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "coordinates",
+        "type": "FLOAT",
+        "mode": "REPEATED"
       },
-      "nullable": true
-    }
-  ]
-}
+      {
+        "name": "type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  }
+]
