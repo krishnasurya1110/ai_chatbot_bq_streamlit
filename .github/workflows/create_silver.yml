@@ -14,7 +14,8 @@ jobs:
       INIT_SCRIPT_GCS: dataproc_init.sh
       CLUSTER_NAME: rakshaka
       PYTHON_SCRIPT: silver_main.py
-      SPARK_FILES: silver_functions.py,silver_logger.py
+      FUNCTIONS_SCRIPT: silver_functions.py
+      LOGGING_SCRIPT: silver_logger.py
       SPARK_ARGS: |-
         "gs://nyc_subway_transit_data/"
         "gs://nyc_transit_delta_lake/"
@@ -85,7 +86,7 @@ jobs:
             --cluster=${CLUSTER_NAME} \
             --region=us-central1 \
             gs://${BUCKET_NAME}/${PYTHON_SCRIPT} \
-            --files=gs://${BUCKET_NAME}/${SPARK_FILES} \
+            --files=gs://${BUCKET_NAME}/${FUNCTIONS_SCRIPT}, gs://${BUCKET_NAME}/${LOGGING_SCRIPT} \
             -- \
             ${SPARK_ARGS}
 
