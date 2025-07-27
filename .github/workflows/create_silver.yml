@@ -13,6 +13,7 @@ jobs:
       INIT_SCRIPT_LOCAL: dataproc_init.sh
       INIT_SCRIPT_GCS: dataproc_init.sh
       CLUSTER_NAME: rakshaka
+      PYTHON_SCRIPT: silver_main.py
 
     steps:
       - name: Code Checkout
@@ -71,3 +72,10 @@ jobs:
             echo "Dataproc Cluster ${CLUSTER_NAME} already exists."
           fi
 
+      - name: Submit Spark Job
+        run: |
+          echo "Submitting Spark job to Dataproc Cluster: ${CLUSTER_NAME}"
+          gcloud dataproc jobs submit pyspark \
+            --cluster=${CLUSTER_NAME} \
+            --region=us-central1 \
+            gs://${BUCKET_NAME}/${PYTHON_SCRIPT}
