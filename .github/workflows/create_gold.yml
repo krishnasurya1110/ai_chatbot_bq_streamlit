@@ -1,9 +1,8 @@
 name: Create GCS Bucket & BQ Table
-
 on:
-    push:
-        paths:
-            - 'main/gold_layer/**' 
+  push:
+    paths:
+      - 'gold_layer/gold_main.py'
 
 jobs:
   create-resources:
@@ -33,7 +32,7 @@ jobs:
 
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
-      
+
       - name: Generate 4-character hash for bucket name
         id: hash
         run: |
@@ -81,7 +80,7 @@ jobs:
           else
             echo "Table ${{ secrets.BQ_DATASET }}.${{ env.INCREMENTAL_TABLE_NAME }} already exists"
           fi
-     
+
       - name: Submit PySpark Job to Dataproc
         run: |
           gcloud dataproc jobs submit pyspark \
@@ -97,10 +96,3 @@ jobs:
             --dataset_id=${{ secrets.BQ_DATASET }} \
             --bq_table_id="nyc" \
             --inc_bq_table_id="inc_nyc"
-
-                  - name: Run Additional BigQuery Script
-
-      - name: Load data for chatbot
-        run: |
-          gsutil cp gs://dataproc-cluster-spark-jars/bq_data_for_chatbot.py .
-          python bq_data_for_chatbot.py
