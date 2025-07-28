@@ -87,16 +87,6 @@ jobs:
       - name: Load data for chatbot
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: "./gcloud-service-key.json"  # Updated path to the JSON key file
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          BQ_DATASET: ${{ secrets.BQ_DATASET }}
-        run: |
-          gsutil cp gs://${{ secrets.BUCKET_NAME }}/bq_data_for_chatbot.py .
-          python bq_data_for_chatbot.py
-
-      - name: Load data for chatbot
-        if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
-        env:
           GOOGLE_APPLICATION_CREDENTIALS: "./gcloud-service-key.json"
         run: |
           gsutil cp gs://dataproc-cluster-spark-jars/bq_data_for_chatbot.py .
