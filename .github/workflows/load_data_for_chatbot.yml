@@ -84,6 +84,10 @@ jobs:
 
       - name: Load data for chatbot
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          BQ_DATASET: ${{ secrets.BQ_DATASET }}
         run: |
           gsutil cp gs://${BUCKET_NAME}/bq_data_for_chatbot.py .
           python bq_data_for_chatbot.py
+
