@@ -99,5 +99,5 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "./gcloud-service-key.json"
         run: |
-          gsutil cp gs://${{ env.BUCKET_NAME }}/bq_data_for_chatbot.py .
+          gsutil cp gs://dataproc-cluster-spark-jars/bq_data_for_chatbot.py .
           python bq_data_for_chatbot.py
