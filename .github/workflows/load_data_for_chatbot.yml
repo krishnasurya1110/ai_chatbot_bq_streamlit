@@ -13,6 +13,8 @@ jobs:
       BUCKET_NAME: dataproc-cluster-spark-jars
       TABLE_NAME: nyc
       CLUSTER_NAME: rakshaka
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      BQ_DATASET: ${{ secrets.BQ_DATASET }}
 
     steps:
       - name: Checkout Code
@@ -21,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11' # Specify the Python version you need
+          python-version: '3.11'
 
       - name: Create JSON Credentials File
         uses: jsdaniell/create-json@v1.2.3
@@ -88,6 +90,9 @@ jobs:
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "./gcloud-service-key.json"
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          BQ_DATASET: ${{ secrets.BQ_DATASET }}
         run: |
           gsutil cp gs://dataproc-cluster-spark-jars/bq_data_for_chatbot.py .
           python bq_data_for_chatbot.py
+
