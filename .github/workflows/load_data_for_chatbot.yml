@@ -37,7 +37,10 @@ jobs:
           export_default_credentials: true
 
       - name: Authenticate to Google Cloud
-        run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
+        run: |
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > gcloud-service-key.json
+          gcloud auth activate-service-account --key-file=gcloud-service-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS="gcloud-service-key.json"
 
       - name: Install Dependencies
         run: |
@@ -85,6 +88,7 @@ jobs:
       - name: Load data for chatbot
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: "gcloud-service-key.json"
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           BQ_DATASET: ${{ secrets.BQ_DATASET }}
         run: |

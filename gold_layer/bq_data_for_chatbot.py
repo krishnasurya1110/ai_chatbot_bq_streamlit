@@ -88,3 +88,4 @@ def run_bigquery_sql():
     print(f"Daily data has been written to the table: {gcp_project_id}.{bq_dataset}.daily_data")
 
 run_bigquery_sql()
+
