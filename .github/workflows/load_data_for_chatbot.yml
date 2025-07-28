@@ -7,6 +7,8 @@ on:
 jobs:
   load-data-for-chatbot:
     runs-on: ubuntu-latest
+    env:
+      BUCKET_NAME: dataproc-cluster-spark-jars
 
     steps:
       - name: Checkout Code
@@ -28,7 +30,12 @@ jobs:
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
+      - name: Upload files to GCS
+        run: |
+          echo "Upload gold layer files to GCS bucket ${BUCKET_NAME}"
+          gsutil -m rsync -r gold_layer/ gs://${BUCKET_NAME}
+
       - name: Load data for chatbot
         run: |
-          gsutil cp gs://dataproc-cluster-spark-jars/bq_data_for_chatbot.py .
+          gsutil cp gs://${BUCKET_NAME}/bq_data_for_chatbot.py .
           python bq_data_for_chatbot.py
