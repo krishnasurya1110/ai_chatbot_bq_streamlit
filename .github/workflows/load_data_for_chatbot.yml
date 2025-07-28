@@ -86,4 +86,4 @@ jobs:
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         run: |
           gsutil cp gs://${BUCKET_NAME}/bq_data_for_chatbot.py .
-          python gs://${BUCKET_NAME}/bq_data_for_chatbot.py
+          python bq_data_for_chatbot.py

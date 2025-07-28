@@ -81,4 +81,3 @@ def run_bigquery_sql():
     daily_data_query_job = client.query(sql_daily_data)
     daily_data_query_job.result()
     print("Daily data has been written to the table: ${{ secrets.GCP_PROJECT_ID }}.${{ secrets.BQ_DATASET }}.daily_data")
-
