@@ -3,7 +3,7 @@ name: Create GCS Bucket & BQ Table
 on:
     push:
         paths:
-            - 'gold_layer/gold_main.py' 
+            - 'gold_layer/' 
 
 jobs:
   create-resources:
