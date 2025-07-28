@@ -1,4 +1,5 @@
 name: Load Data for Chatbot
+
 on:
   push:
     paths:
@@ -7,12 +8,20 @@ on:
 jobs:
   load-data-for-chatbot:
     runs-on: ubuntu-latest
+
     env:
       BUCKET_NAME: dataproc-cluster-spark-jars
+      TABLE_NAME: nyc
+      CLUSTER_NAME: rakshaka
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11' # Specify the Python version you need
 
       - name: Create JSON Credentials File
         uses: jsdaniell/create-json@v1.2.3
@@ -30,12 +39,52 @@ jobs:
       - name: Authenticate to Google Cloud
         run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
 
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-cloud-bigquery
+
+      - name: Check if Spark Cluster is Active
+        id: check-cluster
+        run: |
+          if gcloud dataproc clusters describe $CLUSTER_NAME --region=us-central1; then
+            echo "Cluster $CLUSTER_NAME is active."
+            echo "cluster_active=true" >> $GITHUB_OUTPUT
+          else
+            echo "Cluster $CLUSTER_NAME is not active."
+            echo "cluster_active=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if BigQuery Table Exists
+        id: check-table
+        run: |
+          if bq show --format=prettyjson ${{ secrets.GCP_PROJECT_ID }}:${{ secrets.BQ_DATASET }}.$TABLE_NAME > /dev/null 2>&1; then
+            echo "Table ${{ secrets.BQ_DATASET }}.$TABLE_NAME exists."
+            echo "table_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Table ${{ secrets.BQ_DATASET }}.$TABLE_NAME does not exist."
+            echo "table_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Proceed if Cluster and Table conditions are satisfied
+        if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
+        run: |
+          echo "All conditions satisfied. Proceeding with the workflow."
+
+      - name: Inform if conditions are not satisfied
+        if: steps.check-cluster.outputs.cluster_active != 'true' || steps.check-table.outputs.table_exists != 'true'
+        run: |
+          echo "Conditions not satisfied. Please ensure the Spark cluster is active and the BigQuery table exists."
+          exit 1
+
       - name: Upload files to GCS
+        if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         run: |
           echo "Upload gold layer files to GCS bucket ${BUCKET_NAME}"
           gsutil -m rsync -r gold_layer/ gs://${BUCKET_NAME}
 
       - name: Load data for chatbot
+        if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         run: |
           gsutil cp gs://${BUCKET_NAME}/bq_data_for_chatbot.py .
           python bq_data_for_chatbot.py
