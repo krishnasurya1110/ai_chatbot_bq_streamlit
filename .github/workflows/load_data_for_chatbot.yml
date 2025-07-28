@@ -44,6 +44,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-cloud-bigquery
 
+      - name: Upload files to GCS
+        run: |
+          echo "Upload gold layer files to GCS bucket ${BUCKET_NAME}"
+          gsutil -m rsync -r gold_layer/ gs://${BUCKET_NAME}
+
       - name: Check if Spark Cluster is Active
         id: check-cluster
         run: |
@@ -77,14 +82,8 @@ jobs:
           echo "Conditions not satisfied. Please ensure the Spark cluster is active and the BigQuery table exists."
           exit 1
 
-      - name: Upload files to GCS
-        if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
-        run: |
-          echo "Upload gold layer files to GCS bucket ${BUCKET_NAME}"
-          gsutil -m rsync -r gold_layer/ gs://${BUCKET_NAME}
-
       - name: Load data for chatbot
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         run: |
           gsutil cp gs://${BUCKET_NAME}/bq_data_for_chatbot.py .
-          python bq_data_for_chatbot.py
+          python gs://${BUCKET_NAME}/bq_data_for_chatbot.py
