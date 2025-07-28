@@ -1,0 +1,34 @@
+name: Load Data for Chatbot
+on:
+  push:
+    paths:
+      - 'gold_layer/bq_data_for_chatbot.py'
+
+jobs:
+  load-data-for-chatbot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Create JSON Credentials File
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "gcloud-service-key.json"
+          json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Authenticate to Google Cloud
+        run: gcloud auth activate-service-account --key-file=gcloud-service-key.json
+
+      - name: Load data for chatbot
+        run: |
+          gsutil cp gs://dataproc-cluster-spark-jars/bq_data_for_chatbot.py .
+          python bq_data_for_chatbot.py
