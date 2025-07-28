@@ -29,18 +29,17 @@ jobs:
           name: "gcloud-service-key.json"
           json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: Set up gcloud
+      - name: Install the gcloud CLI
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate gcloud CLI explicitly
         run: |
-          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > gcloud-service-key.json
           gcloud auth activate-service-account --key-file=gcloud-service-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS="gcloud-service-key.json"
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Install Dependencies
         run: |
@@ -88,10 +87,9 @@ jobs:
       - name: Load data for chatbot
         if: steps.check-cluster.outputs.cluster_active == 'true' && steps.check-table.outputs.table_exists == 'true'
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: "gcloud-service-key.json"
+          GOOGLE_APPLICATION_CREDENTIALS: "./gcloud-service-key.json"  # Updated path to the JSON key file
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           BQ_DATASET: ${{ secrets.BQ_DATASET }}
         run: |
-          gsutil cp gs://${BUCKET_NAME}/bq_data_for_chatbot.py .
+          gsutil cp gs://${{ secrets.BUCKET_NAME }}/bq_data_for_chatbot.py .
           python bq_data_for_chatbot.py
-
